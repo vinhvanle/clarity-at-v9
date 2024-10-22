@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "types": ["node", "@wdio/globals/types", "@wdio/cucumber-framework"]
+  },
+  "include": [
+    "**/*.js",
+    "**/*.json",
+    "node_modules/@types",
+    "node_modules/expect-webdriverio"
+  ]
+}
