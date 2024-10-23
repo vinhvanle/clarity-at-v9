@@ -1,14 +1,30 @@
 import { Given } from "@wdio/cucumber-framework";
+import navigationBarComp from "../../components/NavigationBar/navigationBar.comp";
+import loginPage from "../../page-objects/loginPage/login.page";
+import stringManipulation from "../../helper/stringManipulation";
+Given(
+  /^I login to the application as (.*) user$/,
+  { timeout: 300000 },
+  async (userRole) => {
+    if (!userRole) {
+      throw new Error(`Given user role: ${userRole} is invalid`);
+    }
 
-Given(/^I login to the application$/, async () => {
-  await browser.url(`${browser.options.baseUrl}`);
-  // await $(`//input[@id='i0116']`).setValue('Employee1@scc.com');
-  // await $(`//input[@id='idSIButton9']`).click();
-  // await $(`//input[@id='i0118']`).setValue('5xsrjckrvK5pBM!');
-  // await $(`//input[@id='idSIButton9']`).click();
-  // await $(`//input[@id='idSIButton9']`).click();
+    const userRoleWithUnderscores =
+      stringManipulation.replaceSpacesWithUnderscores(userRole);
+    userRole = stringManipulation.capitalizeAllLetters(userRoleWithUnderscores);
 
-  //   await expect(await browser.getUrl()).toContain("DefaultDashboard");
-  await browser.maximizeWindow();
-  //   await browser.debug();
-});
+    await browser.url(`${browser.options.baseUrl}`);
+    await browser.maximizeWindow();
+    await navigationBarComp.signOut();
+
+    await browser.url(`${browser.options.baseUrl}`);
+
+    await loginPage.signIn(
+      process["env"][`${userRole}_EMAIL`],
+      process["env"][`${userRole}_PASSWORD`]
+    );
+
+    await expect(await browser.getTitle()).toContain("Finance and Operations");
+  }
+);

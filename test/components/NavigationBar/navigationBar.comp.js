@@ -12,26 +12,14 @@ class NavBar extends Page {
     super();
   }
 
-  /**
-   * Get the dashboard button element.
-   * @return {WebdriverIO.Element} The dashboard button element.
-   */
   get dashboardButton() {
     return $(`//button[@id='NavBarDashboard']`);
   }
 
-  /**
-   * Get the navigation search input element.
-   * @return {WebdriverIO.Element} The navigation search input element.
-   */
   get navSearch() {
     return $(`//input[@id='NavigationSearchBox_searchBoxInput_input']`);
   }
 
-  /**
-   * Get the company button element.
-   * @return {WebdriverIO.Element} The company button element.
-   */
   get navCompanyButton() {
     return $(`//button[@id='NavBarCompany']`);
   }
@@ -39,6 +27,18 @@ class NavBar extends Page {
   get formCaption() {
     return $(`//span[@class='formCaption']`);
   }
+
+  get userBtn() {
+    return $(`//button[@id='UserBtn']`);
+  }
+
+  get signOutBtn() {
+    return $(`//span[@id='SignOut_label']`);
+  }
+
+  /**
+   * Define functions
+   */
 
   /**
    * Search for a page using the navigation search box.
@@ -53,6 +53,17 @@ class NavBar extends Page {
       `//span[@class='formCaption' and contains(text(), '${pageName}')]`
     );
     expect(await formCaption.getText()).toContain(pageName);
+  }
+
+  async signOut() {
+    try {
+      await this.click(await this.userBtn);
+      await expect(await this.signOutBtn).toBeDisplayed();
+      await this.click(await this.signOutBtn);
+      await expect(await browser.getTitle()).toContain("Sign out");
+    } catch (err) {
+      console.log(`>>>> error with signout function: ${err}`);
+    }
   }
 }
 

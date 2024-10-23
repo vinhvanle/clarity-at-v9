@@ -6,7 +6,9 @@ import personnelManagementPage from "../../page-objects/personelManagementPage/p
 import employeesListPage from "../../page-objects/employeesListPage/employeesList.page";
 import employeeDetailPage from "../../page-objects/employeeDetailPage/employeeDetail.page";
 
-let employeeName = "Abigail Neppalli";
+import HRTestData from "../../../data/HR.json" assert { type: "json" };
+
+// let employeeName = "Achilleas Giannaros";
 
 When(
   /^I navigate to "(.*)" (page|workspace) in "(.*)" module$/,
@@ -27,10 +29,13 @@ When(/^I open an employee record in (read|edit) mode$/, async function (mode) {
   if (mode === "edit") {
     await actionPaneComp.clickEditButton();
   }
-  await employeesListPage.filterForRecordByColumnName(employeeName, "Name");
+  await employeesListPage.filterForRecordByColumnName(
+    HRTestData["6403"]["employeeName"],
+    "Name"
+  );
   await employeesListPage.openFirstRecord();
   const pageTitleField = await employeeDetailPage.pageTitleField.getText();
-  await expect(pageTitleField).toContain(employeeName);
+  await expect(pageTitleField).toContain(HRTestData["6403"]["employeeName"]);
 });
 
 When(/^I click employee tile$/, async function () {
