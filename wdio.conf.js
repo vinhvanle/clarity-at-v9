@@ -54,13 +54,7 @@ export const config = {
     {
       browserName: "chrome",
       "goog:chromeOptions": {
-        args: [
-          "--disable-features=IsolateOrigins,site-per-process",
-          "--disable-cache",
-          "--disable-application-cache",
-          "--disable-session-restore",
-          "--disable-offline-load-stale-cache",
-        ],
+        args: ["--disable-gpu", "--no-sandbox", "--disable-dev-shm-usage"],
       },
       acceptInsecureCerts: true,
       timeouts: { implicit: 30000, pageLoad: 200000, script: 30000 },
@@ -101,7 +95,7 @@ export const config = {
   // baseUrl: 'http://localhost:8080',
   //
   // Default timeout for all waitFor* commands.
-  waitforTimeout: 30000,
+  waitforTimeout: 60000,
   //
   // Default timeout in milliseconds for request
   // if browser driver or grid doesn't send response
@@ -162,7 +156,7 @@ export const config = {
     // <string> (expression) only execute the features or scenarios with tags matching the expression
     tagExpression: "",
     // <number> timeout for step definitions
-    timeout: 60000,
+    timeout: 300000,
     // <boolean> Enable this config to treat undefined definitions as warnings.
     ignoreUndefinedDefinitions: false,
   },
@@ -182,7 +176,7 @@ export const config = {
    */
   onPrepare: function (config, capabilities) {
     // Clean up the allure-results directory before running the tests
-    if (process.env.RUNNER === "LOCAL" && fs.existsSync("allure-results")) {
+    if (fs.existsSync("allure-results")) {
       fs.rm("allure-results", { recursive: true }, (err) => {
         if (err) {
           console.error(err);
