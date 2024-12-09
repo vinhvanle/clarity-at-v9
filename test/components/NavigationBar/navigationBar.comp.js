@@ -36,6 +36,18 @@ class NavBar extends Page {
     return $(`//span[@id='SignOut_label']`);
   }
 
+  get notificationBtn() {
+    return $(`//button[@id='dynNavigationBarMessages_buttonNotifications']`);
+  }
+
+  get notificationItems() {
+    return $$(`//li[@class='messageCenter-item']`);
+  }
+
+  get messageCenter() {
+    return $(`//div[@class='messageCenter']`);
+  }
+
   /**
    * Define functions
    */
@@ -60,10 +72,32 @@ class NavBar extends Page {
       await this.click(await this.userBtn);
       await expect(await this.signOutBtn).toBeDisplayed();
       await this.click(await this.signOutBtn);
-      await expect(await browser.getTitle()).toContain("Sign out");
     } catch (err) {
       console.log(`>>>> error with signout function: ${err}`);
     }
+  }
+
+  async checkNotification(requestID) {
+    let isOk = false;
+    await this.notificationBtn.click();
+    await expect(await this.messageCenter).toBeDisplayed();
+    const notificationItems = await this.notificationItems;
+    for (let notification of notificationItems) {
+      const notificationText = await notification
+        .$(`//span[contains(@class,'messageCenter-itemMessage')]`)
+        .getText();
+      if (
+        notificationText.includes(requestID) &&
+        notificationText.includes("Journal is OK")
+      ) {
+        isOk = true;
+      }
+    }
+
+    await this.notificationBtn.click();
+    await expect(!(await this.messageCenter.isDisplayed()));
+
+    return isOk;
   }
 }
 

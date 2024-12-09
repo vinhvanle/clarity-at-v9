@@ -1,12 +1,30 @@
 {
   "6403": {
     "employeeName": "Achilleas Giannaros",
-    "newBirthday": "1990-01-01"
+    "newBirthday": "1/1/1990"
   },
   "6405": {
     "newNationality": "FRA"
   },
   "6406": {
     "newEthnic": "Asian"
+  },
+  "6510": {
+    "StartDate": {
+      "valid": "10/1/2024",
+      "invalid": "29/10/2024"
+    },
+    "EndDate": {
+      "valid": "10/1/2024",
+      "invalid": "29/10/2024"
+    },
+    "Description": {
+      "valid": "This is a valid description"
+    }
+  },
+  "6231": {
+    "Description": "This is a valid description written by AT",
+    "Title": "Computer Operator",
+    "Country": "GBR"
   }
 }

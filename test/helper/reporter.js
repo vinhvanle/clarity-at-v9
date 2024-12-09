@@ -1,5 +1,5 @@
 import allure from "@wdio/allure-reporter";
-import logger from "./logger.ts";
+import logger from "./logger.js";
 
 /**
  * Global reporter used for both logger and Allure.
