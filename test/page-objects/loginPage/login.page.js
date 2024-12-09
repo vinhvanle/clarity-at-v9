@@ -34,17 +34,13 @@ class LoginPage extends Page {
   }
 
   async signIn(email, password) {
-    try {
-      await expect(await this.pickAnAccountHeadding).toBeDisplayed();
-      await this.click(await this.useAnotherAccountBtn);
-      await this.typeInto(await this.emailInputField, email);
-      await this.click(await this.nextBtn);
-      await expect(await this.enterPasswordHeadding).toBeDisplayed();
-      await this.typeInto(await this.passwordInputField, password);
-      await this.click(await this.nextBtn);
-    } catch (err) {
-      console.log(`>>>>> Error with signing Function: ${err}`);
-    }
+    await expect(await this.pickAnAccountHeadding).toBeDisplayed();
+    await this.click(await this.useAnotherAccountBtn);
+    await this.typeInto(await this.emailInputField, email);
+    await this.click(await this.nextBtn);
+    await expect(await this.enterPasswordHeadding).toBeDisplayed();
+    await this.typeInto(await this.passwordInputField, password);
+    await this.click(await this.nextBtn);
   }
 }
 

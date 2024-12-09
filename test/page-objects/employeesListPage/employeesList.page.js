@@ -1,5 +1,7 @@
 import Page from "../page";
 
+import keysConst from "../../../data/constants/keys.const";
+
 class EmployeesListPage extends Page {
   constructor() {
     super();
@@ -32,15 +34,13 @@ class EmployeesListPage extends Page {
   async openFirstRecord() {
     const firstRecord = await this.records[0];
     await this.click(firstRecord);
-    await browser.keys("Enter");
+    await browser.keys(keysConst.KEY_ENTER);
   }
 
   async filterByColumn(columnName) {
     if (!columnName) {
       throw new Error("No column name provided");
     }
-    columnName = columnName.slice(0, 1).toUpperCase() + columnName.slice(1);
-
     const quickFilter_listFieldNames = await this.quickFilter_listFieldName;
 
     quickFilter_listFieldNames.forEach(async function (element) {

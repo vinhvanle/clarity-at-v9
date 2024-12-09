@@ -63,7 +63,6 @@ class PaneNav extends Page {
     await this.click(await this.expandAllButton);
     const pageBtn = await $(`//div[@data-dyn-title='${workspaceName}']`);
     await this.click(pageBtn);
-    // await browser.debug()
   }
 
   /**
@@ -78,7 +77,9 @@ class PaneNav extends Page {
     const moduleBtn = await $(`//a[@data-dyn-title='${moduleName}']`);
     await this.click(moduleBtn);
     await this.click(await this.expandAllButton);
-    const pageBtn = await $(`//a[@data-dyn-title='${pageName}']`);
+    const pageBtn = await $(
+      `//a[@data-dyn-title='${pageName}' and @class='modulesFlyout-linkText']`
+    );
     await this.click(pageBtn);
     // await browser.debug()
   }

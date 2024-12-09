@@ -68,7 +68,7 @@ export const config = {
   // Define all options that are relevant for the WebdriverIO instance here
   //
   // Level of logging verbosity: trace | debug | info | warn | error | silent
-  logLevel: "info",
+  logLevel: "error",
   //
   // Set specific log levels per logger
   // loggers:
@@ -95,7 +95,7 @@ export const config = {
   // baseUrl: 'http://localhost:8080',
   //
   // Default timeout for all waitFor* commands.
-  waitforTimeout: 60000,
+  waitforTimeout: 120000,
   //
   // Default timeout in milliseconds for request
   // if browser driver or grid doesn't send response
@@ -120,13 +120,13 @@ export const config = {
 
   //
   // The number of times to retry the entire specfile when it fails as a whole
-  // specFileRetries: 1,
+  specFileRetries: 0,
   //
   // Delay in seconds between the spec file retry attempts
-  // specFileRetriesDelay: 0,
+  specFileRetriesDelay: 0,
   //
   // Whether or not retried spec files should be retried immediately or deferred to the end of the queue
-  // specFileRetriesDeferred: false,
+  specFileRetriesDeferred: false,
   //
   // Test reporter for stdout.
   // The only one supported by default is 'dot'
@@ -136,7 +136,7 @@ export const config = {
   // If you are using Cucumber you need to specify the location of your step definitions.
   cucumberOpts: {
     // <string[]> (file/dir) require files before executing features
-    require: [`./test/step-definitions/**/*.ts`],
+    require: [`./test/step-definitions/**/*.js`],
     // <boolean> show full backtrace for errors
     backtrace: false,
     // <string[]> ("extension:module") require files with the given EXTENSION after requiring MODULE (repeatable)
@@ -156,7 +156,7 @@ export const config = {
     // <string> (expression) only execute the features or scenarios with tags matching the expression
     tagExpression: "",
     // <number> timeout for step definitions
-    timeout: 300000,
+    timeout: 60000,
     // <boolean> Enable this config to treat undefined definitions as warnings.
     ignoreUndefinedDefinitions: false,
   },
@@ -248,7 +248,8 @@ export const config = {
   beforeScenario: function (world, context) {
     //get the testID from the Scenario
     let arr = world.pickle.name.split(/:/);
-    //set it to the Cucumber worl object
+
+    //set it to the Cucumber world object
     if (arr.length > 0) {
       context.testID = arr[0];
     }
@@ -278,8 +279,7 @@ export const config = {
    * @param {number}             result.duration  duration of scenario in milliseconds
    * @param {object}             context          Cucumber World object
    */
-  // afterStep: function (step, scenario, result, context) {
-  // },
+  // afterStep: async function (step, scenario, result, context) {},
   /**
    *
    * Runs after a Cucumber Scenario.
@@ -290,8 +290,19 @@ export const config = {
    * @param {number}                 result.duration  duration of scenario in milliseconds
    * @param {object}                 context          Cucumber World object
    */
-  // afterScenario: function (world, result, context) {
-  // },
+  afterScenario: function (world, result, context) {
+    if (result.passed) {
+      const dir = `${process.cwd()}/test-execution-results/${context.testID}`;
+      if (fs.existsSync(dir)) {
+        fs.rmSync(dir, { recursive: true, force: true });
+      }
+      fs.mkdirSync(dir, { recursive: true });
+      fs.writeFileSync(
+        `${dir}/${context.testID}.json`,
+        JSON.stringify(context.executionDetails)
+      );
+    }
+  },
   /**
    *
    * Runs after a Cucumber Feature.
